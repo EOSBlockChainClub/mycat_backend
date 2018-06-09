@@ -14,29 +14,24 @@ def _common(act_name, arguments):
 def search(user, source_lang, target_lang, sentence_id):
     args = '"{}", "{}", "{}", {}'.format(user, source_lang, target_lang, sentence_id)
     out = _common("search", args)
-    ret = json.loads(out)
-    return ret
+    return True
 
 def confirm(user, source_lang, target_lang, sentence_id):
     args = '"{}", "{}", "{}", {}'.format(user, source_lang, target_lang, sentence_id)
     out = _common("confirm", args)
-    ret = json.loads(out)
-    return ret
+    return True
 
 def inputtag(user, source_lang, target_lang, sentence_id, tag_id):
     args = '"{}", "{}", "{}", {}, {}'.format(user, source_lang, target_lang, sentence_id, tag_id)
     out = _common("inputtag", args)
-    ret = json.loads(out)
-    return ret
+    return True
 
 def original(user, source_lang, target_lang, sentence_id):
     args = '"{}", "{}", "{}", {}'.format(user, source_lang, target_lang, sentence_id)
     out = _common("original", args)
-    ret = json.loads(out)
-    return ret
+    return True
 
 def translate(user, source_lang, target_lang, sentence_id):
     args = '"{}", "{}", "{}", {}'.format(user, source_lang, target_lang, sentence_id)
     out = _common("translate", args)
-    ret = json.loads(out)
-    return ret
+    return True

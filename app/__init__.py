@@ -24,6 +24,9 @@ app.register_blueprint(status, url_prefix='/api/block/status')
 from app.action.urls import action
 app.register_blueprint(action, url_prefix='/api/block/action')
 
+from app.new.urls import new
+app.register_blueprint(new, url_prefix='/api/block/new')
+
 #: 등록된 url 확인하기
 print(app.url_map)
 

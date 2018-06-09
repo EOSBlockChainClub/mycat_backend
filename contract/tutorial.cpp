@@ -158,8 +158,8 @@ void token::getlcpoint( account_name user ){
         // Table pointer iteration
         itr_record = _point_index.find(grouped_itr->id);
         eosio::print("{");
-        eosio::print("    \"source_lang\": ", itr_record->source_lang);
-        eosio::print(",   \"target_lang\": ", itr_record->target_lang);
+        eosio::print("    \"source_lang\": \"", itr_record->source_lang, "\"");
+        eosio::print(",   \"target_lang\": \"", itr_record->target_lang, "\"");
         eosio::print(",   \"point\": ", itr_record->point);
         eosio::print("}");
         grouped_itr++;
@@ -288,6 +288,44 @@ void token::inputtag(
             , tag_id
             , eosio::asset(0, S(4, LC ))
             , 1000
+    );
+}
+
+
+void token::original(
+        account_name          user
+      , std::string&          source_lang
+      , std::string&          target_lang
+      , uint64_t              sentence_id
+     ){
+    _write_action(
+              user
+            , "original"
+            , source_lang
+            , target_lang
+            , sentence_id
+            , NULL
+            , eosio::asset(0, S(4, LC ))
+            , 0
+    );
+}
+
+
+void token::translate(
+        account_name          user
+      , std::string&          source_lang
+      , std::string&          target_lang
+      , uint64_t              sentence_id
+     ){
+    _write_action(
+              user
+            , "translate"
+            , source_lang
+            , target_lang
+            , sentence_id
+            , NULL
+            , eosio::asset(0, S(4, LC ))
+            , 0
     );
 }
 

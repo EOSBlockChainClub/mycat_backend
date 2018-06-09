@@ -8,7 +8,7 @@ def _common(act_name, arguments):
     command = shlex.split(command_raw)
     p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, errs = p.communicate()
-    ret = json.loads(out.decode('utf8'))['processed']['action_traces'][0]["console"]
+    ret = json.loads(out.decode('utf8'))['processed']['action_traces'][0]["console"] if out.decode('utf8') is not None and len(out.decode('utf8')) > 0 else '[]'
 
     return ret
 

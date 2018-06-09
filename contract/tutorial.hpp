@@ -110,6 +110,21 @@ class token : public eosio::contract {
                 , uint64_t              sentence_id
                 , uint64_t              tag_id
                );
+
+          void original(
+                  account_name          user
+                , std::string&          source_lang
+                , std::string&          target_lang
+                , uint64_t              sentence_id
+               );
+
+          void translate(
+                  account_name          user
+                , std::string&          source_lang
+                , std::string&          target_lang
+                , uint64_t              sentence_id
+               );
+
     };
-    EOSIO_ABI(token, (transfer)(createnew)(issuetoken)(getlctoken)(getlcpoint)(getwholeact)(getuseract)(search)(confirm)(inputtag) );
+    EOSIO_ABI(token, (transfer)(createnew)(issuetoken)(getlctoken)(getlcpoint)(getwholeact)(getuseract)(search)(confirm)(inputtag)(original)(translate) );
 }

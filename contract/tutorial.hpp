@@ -33,6 +33,7 @@ class token : public eosio::contract {
 	      time           executed_at;
               account_name   user;
               std::string    action_type;
+              account_name   objective;
               std::string    source_lang;
               std::string    target_lang;
               uint64_t       sentence_id;
@@ -70,6 +71,7 @@ class token : public eosio::contract {
 	  void _write_action(
                   account_name             user,
                   std::string              action_type,
+                  account_name             objective,
                   std::string&             source_lang,
                   std::string&             target_lang,
                   uint64_t                 sentence_id,
@@ -90,12 +92,13 @@ class token : public eosio::contract {
 	  void getuseract( account_name user, uint64_t page=1 );
 
 	  void search(
- 		account_name            user,
+ 		account_name            searcher,
+ 		account_name            receiver,
 		std::string&            source_lang,
 		std::string&            target_lang,
 		uint64_t                sentence_id
 	       );
-
+/*
 	  void confirm(
  		account_name            user,
 		std::string&            source_lang,
@@ -117,7 +120,7 @@ class token : public eosio::contract {
                 , std::string&          target_lang
                 , uint64_t              sentence_id
                );
-
+*/
           void translate(
                   account_name          user
                 , std::string&          source_lang
@@ -126,5 +129,5 @@ class token : public eosio::contract {
                );
 
     };
-    EOSIO_ABI(token, (transfer)(createnew)(issuetoken)(getlctoken)(getlcpoint)(getwholeact)(getuseract)(search)(confirm)(inputtag)(original)(translate) );
+    EOSIO_ABI(token, (transfer)(createnew)(issuetoken)(getlctoken)(getlcpoint)(getwholeact)(getuseract)(search)(translate) );
 }

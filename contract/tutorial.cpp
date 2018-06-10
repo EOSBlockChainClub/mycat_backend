@@ -39,8 +39,6 @@ void token::_subtract_token_balance( account_name user, eosio::asset q){
     /**
         LC token simple deductin
     */
-   require_auth( _self );
-
    auto toitr = _token_index.find( user );
    _token_index.modify( toitr, 0, [&]( auto& a ) {
        eosio_assert( a.balance >= q, "Not enough token balance" );
@@ -97,6 +95,7 @@ void token::_point_issue(
 void token::_write_action(
           account_name           user
         , std::string            action_type
+        , account_name           objective
         , std::string&           source_lang
         , std::string&           target_lang
         , uint64_t               sentence_id
@@ -110,6 +109,7 @@ void token::_write_action(
         a.executed_at = now();
         a.user        = user;
         a.action_type = action_type;
+        a.objective   = objective;
         a.source_lang = source_lang;
         a.target_lang = target_lang;
         a.sentence_id = sentence_id;
@@ -180,6 +180,7 @@ void token::getwholeact(uint64_t page){
         eosio::print("    \"time\": ", itr->executed_at);
         eosio::print("  , \"user\": ", itr->user);
         eosio::print("  , \"action_type\": \"", itr->action_type, "\"");
+        eosio::print("  , \"objective\": ", itr->objective);
         eosio::print("  , \"source_lang\": \"", itr->source_lang, "\"");
         eosio::print("  , \"target_lang\": \"", itr->target_lang, "\"");
         eosio::print("  , \"sentence_id\": ", itr->sentence_id);
@@ -214,6 +215,7 @@ void token::getuseract( account_name user, uint64_t page ){
         eosio::print("    \"time\": ", user_itr->executed_at);
         eosio::print("  , \"user\": ", user_itr->user);
         eosio::print("  , \"action_type\": \"", user_itr->action_type, "\"");
+        eosio::print("  , \"objective\": ", user_itr->objective);
         eosio::print("  , \"source_lang\": \"", user_itr->source_lang, "\"");
         eosio::print("  , \"target_lang\": \"", user_itr->target_lang, "\"");
         eosio::print("  , \"sentence_id\": ", user_itr->sentence_id);
@@ -224,33 +226,49 @@ void token::getuseract( account_name user, uint64_t page ){
 
 
         if (user_itr == user_index.begin() || user_itr->user != user) break;
-        if (i != 19) eosio::print(", ");
 
         user_itr--;
+
+        if (user_itr->user != user) break;
+        if (i != 19) eosio::print(", ");
     }
     eosio::print("]");
 }
 
 
 void token::search(
-        account_name          user
+        account_name          searcher
+      , account_name          receiver
       , std::string&          source_lang
       , std::string&          target_lang
       , uint64_t              sentence_id
      ){
-    _subtract_token_balance( user, eosio::asset(10, S(4, LC )) );
+    _subtract_token_balance( searcher, eosio::asset(10000, S(4, LC )) );
+    _issue( receiver, eosio::asset(10000, S(4, LC )) );
     _write_action(
-              user
+              searcher
             , "search"
+            , receiver
             , source_lang
             , target_lang
             , sentence_id
             , NULL
-            , eosio::asset(10, S(4, LC ))
+            , eosio::asset(10000, S(4, LC ))
+            , 0);
+
+    _write_action(
+              receiver
+            , "gain"
+            , searcher
+            , source_lang
+            , target_lang
+            , sentence_id
+            , NULL
+            , eosio::asset(10000, S(4, LC ))
             , 0);
 }
 
-
+/*
 void token::confirm(
         account_name          user
       , std::string&          source_lang
@@ -266,11 +284,12 @@ void token::confirm(
             , sentence_id
             , NULL
             , eosio::asset(0, S(4, LC ))
-            , 1000
+            , 1
     );
 }
+*/
 
-
+/*
 void token::inputtag(
         account_name          user
       , std::string&          source_lang
@@ -290,8 +309,10 @@ void token::inputtag(
             , 1000
     );
 }
+*/
 
 
+/*
 void token::original(
         account_name          user
       , std::string&          source_lang
@@ -309,7 +330,7 @@ void token::original(
             , 0
     );
 }
-
+*/
 
 void token::translate(
         account_name          user
@@ -317,15 +338,17 @@ void token::translate(
       , std::string&          target_lang
       , uint64_t              sentence_id
      ){
+    _point_issue(user, source_lang, target_lang, 1); // 0.1
     _write_action(
               user
             , "translate"
+            , NULL
             , source_lang
             , target_lang
             , sentence_id
             , NULL
             , eosio::asset(0, S(4, LC ))
-            , 0
+            , 1
     );
 }
 
